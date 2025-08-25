@@ -111,7 +111,7 @@ typedef struct merged_options
 
 #define MAX_ENTROPY 7.0
 
-KERNEL_FQ void m34100_init (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
+KERNEL_FQ KERNEL_FA void m34100_init (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
 {
   const u64 gid = get_global_id (0);
 
@@ -137,7 +137,7 @@ KERNEL_FQ void m34100_init (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
   argon2_init_gg (&pws[gid], &salt_bufs[SALT_POS_HOST], &argon2_options, argon2_block);
 }
 
-KERNEL_FQ void m34100_loop (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
+KERNEL_FQ KERNEL_FA void m34100_loop (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
 {
   const u64 gid = get_global_id (0);
   const u64 bid = get_group_id (0);
@@ -208,7 +208,7 @@ KERNEL_FQ void m34100_loop (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
   }
 }
 
-KERNEL_FQ void m34100_comp (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
+KERNEL_FQ KERNEL_FA void m34100_comp (KERN_ATTR_TMPS_ESALT (luks_tmp_t, merged_options_t))
 {
   const u64 gid = get_global_id (0);
   const u64 lid = get_local_id (0);
