@@ -258,7 +258,7 @@ KERNEL_FQ KERNEL_FA void m18600_loop (KERN_ATTR_TMPS_ESALT (odf11_tmp_t, odf11_t
   }
 }
 
-KERNEL_FQ KERNEL_FA FIXED_THREAD_COUNT(FIXED_LOCAL_SIZE) void m18600_comp (KERN_ATTR_TMPS_ESALT (odf11_tmp_t, odf11_t))
+KERNEL_FQ KERNEL_FA void m18600_comp (KERN_ATTR_TMPS_ESALT (odf11_tmp_t, odf11_t))
 {
   const u64 gid = get_global_id (0);
   const u64 lid = get_local_id (0);
