@@ -27,6 +27,7 @@ cp -r $IN/charsets                      $OUT/
 cp -r $IN/layouts                       $OUT/
 cp -r $IN/masks                         $OUT/
 cp -r $IN/bridges                       $OUT/
+cp -r $IN/feeds                         $OUT/
 cp -r $IN/modules                       $OUT/
 cp -r $IN/rules                         $OUT/
 cp -r $IN/extra                         $OUT/
@@ -92,6 +93,8 @@ chmod 755 $OUT/masks
 chmod 644 $OUT/masks/*
 chmod 755 $OUT/bridges
 chmod 644 $OUT/bridges/*
+chmod 755 $OUT/feeds
+chmod 644 $OUT/feeds/*
 chmod 755 $OUT/modules
 chmod 644 $OUT/modules/*
 chmod 644 $OUT/example*

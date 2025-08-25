@@ -17,6 +17,7 @@ RUN pyenv install 3.13 && pyenv global 3.13
 ## Install rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
 ENV PATH="/home/rocm-user/.cargo/bin:${PATH}"
+RUN rustup target add x86_64-pc-windows-gnu
 
 # Add hashcat
 RUN curl https://hashcat.net/files/hashcat-${HASHCAT_VERSION}.7z -o hashcat-${HASHCAT_VERSION}.7z

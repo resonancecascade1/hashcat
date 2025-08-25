@@ -16,6 +16,8 @@
 #include "rp_cpu.h"
 #include "slow_candidates.h"
 #include "dispatch.h"
+#include "generic.h"
+#include "convert.h"
 
 #ifdef WITH_BRAIN
 #include "brain.h"
@@ -1285,6 +1287,10 @@ static int calc (hashcat_ctx_t *hashcat_ctx, hc_device_param_t *device_param)
         if (words_fin == 0) break;
       }
     }
+    else if (attack_mode == ATTACK_MODE_GENERIC)
+    {
+      // todo: probably not supported, is a slow-candidate mode only
+    }
 
     #ifdef WITH_BRAIN
     if (user_options->brain_client == true)
@@ -1333,6 +1339,111 @@ static int calc (hashcat_ctx_t *hashcat_ctx, hc_device_param_t *device_param)
 
           status_ctx->words_cur = get_lowest_words_done (hashcat_ctx);
         }
+      }
+    }
+    else if (attack_mode == ATTACK_MODE_GENERIC)
+    {
+      while (status_ctx->run_thread_level1 == true)
+      {
+        u64 words_extra = -1U;
+        u64 words_extra_total = 0;
+
+        memset (device_param->pws_comp, 0, device_param->size_pws_comp);
+        memset (device_param->pws_idx,  0, device_param->size_pws_idx);
+
+        while (words_extra)
+        {
+          const u64 work = get_work (hashcat_ctx, device_param, words_extra);
+
+          if (work == 0) break;
+
+          words_extra = 0;
+
+          if (generic_thread_seek (hashcat_ctx, device_param->device_id, device_param->words_off) == false) break;
+
+          for (u64 work_cur = 0; work_cur < work; work_cur++)
+          {
+            u8 out_buf[256];
+
+            int out_len = generic_thread_next (hashcat_ctx, device_param->device_id, out_buf);
+
+            if (out_len == -1)
+            {
+              words_extra = 0; // no more data available
+
+              break;
+            }
+
+            if (user_options->wordlist_autohex == true)
+            {
+              if (is_hexify ((const u8 *) out_buf, out_len) == true)
+              {
+                out_len = (int) exec_unhexify ((const u8 *) out_buf, (u32)  out_len, (u8 *) out_buf, (u32) out_len);
+              }
+            }
+
+            if ((out_len < (int) hashconfig->pw_min) || (out_len > (int) hashconfig->pw_max))
+            {
+              words_extra_total++;
+
+              words_extra++;
+
+              continue;
+            }
+
+            pw_add (device_param, out_buf, out_len);
+          }
+
+          if (status_ctx->run_thread_level1 == false) break;
+        }
+
+        if (status_ctx->run_thread_level1 == false) break;
+
+        if (words_extra_total > 0)
+        {
+          hc_thread_mutex_lock (status_ctx->mux_counter);
+
+          for (u32 salt_pos = 0; salt_pos < hashes->salts_cnt; salt_pos++)
+          {
+            status_ctx->words_progress_rejected[salt_pos] += words_extra_total * straight_ctx->kernel_rules_cnt;
+          }
+
+          hc_thread_mutex_unlock (status_ctx->mux_counter);
+        }
+
+        //
+        // flush
+        //
+
+        const u64 pws_cnt = device_param->pws_cnt;
+
+        if (pws_cnt)
+        {
+          if (run_copy (hashcat_ctx, device_param, pws_cnt) == -1)
+          {
+            return -1;
+          }
+
+          if (run_cracker (hashcat_ctx, device_param, device_param->words_off, pws_cnt) == -1)
+          {
+            return -1;
+          }
+
+          device_param->pws_cnt = 0;
+        }
+
+        if (device_param->speed_only_finish == true) break;
+
+        if (status_ctx->run_thread_level2 == true)
+        {
+          device_param->words_done += pws_cnt + words_extra_total;
+
+          status_ctx->words_cur = get_lowest_words_done (hashcat_ctx);
+        }
+
+        if (status_ctx->run_thread_level1 == false) break;
+
+        if (pws_cnt == 0) break;
       }
     }
     else

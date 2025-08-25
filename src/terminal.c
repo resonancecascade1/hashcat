@@ -3059,6 +3059,7 @@ void status_display (hashcat_ctx_t *hashcat_ctx)
     "Hash.Target......: %s",
     hashcat_status->hash_target);
 
+  /* why is there a distinction between force and not ?
   if (user_options->force == true)
   {
     event_log_info (hashcat_ctx,
@@ -3088,6 +3089,17 @@ void status_display (hashcat_ctx_t *hashcat_ctx)
     hashcat_status->time_estimated_absolute,
     hashcat_status->time_estimated_relative);
   }
+  */
+
+  event_log_info (hashcat_ctx,
+  "Time.Started.....: %s (%s)",
+  hashcat_status->time_started_absolute,
+  hashcat_status->time_started_relative);
+
+  event_log_info (hashcat_ctx,
+  "Time.Estimated...: %s (%s)",
+  hashcat_status->time_estimated_absolute,
+  hashcat_status->time_estimated_relative);
 
   if (hashconfig->opti_type & OPTI_TYPE_OPTIMIZED_KERNEL)
   {
@@ -3300,6 +3312,34 @@ void status_display (hashcat_ctx_t *hashcat_ctx)
           "Guess.Charset....: %s",
           hashcat_status->guess_charset);
       }
+
+      break;
+
+    case GUESS_MODE_GENERIC:
+
+      event_log_info (hashcat_ctx,
+        "Guess.Base.......: Generic Feed");
+
+      break;
+
+    case GUESS_MODE_GENERIC_RULES_FILE:
+
+      event_log_info (hashcat_ctx,
+        "Guess.Base.......: Generic Feed");
+
+      event_log_info (hashcat_ctx,
+        "Guess.Mod........: Rules (%s)",
+        hashcat_status->guess_mod);
+
+      break;
+
+    case GUESS_MODE_GENERIC_RULES_GEN:
+
+      event_log_info (hashcat_ctx,
+        "Guess.Base.......: Generic Feed");
+
+      event_log_info (hashcat_ctx,
+        "Guess.Mod........: Rules (Generated)");
 
       break;
   }

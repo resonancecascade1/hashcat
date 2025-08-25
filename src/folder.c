@@ -573,6 +573,18 @@ int folder_config_init (hashcat_ctx_t *hashcat_ctx, MAYBE_UNUSED const char *ins
   #endif
 
   /**
+   * gksz cache, we need to make sure folder exist
+   */
+
+  char *gksz_folder = NULL;
+
+  hc_asprintf (&gksz_folder, "%s/.gkszcache", cache_dir);
+
+  hc_mkdir (gksz_folder, 0700);
+
+  hcfree (gksz_folder);
+
+  /**
    * kernel cache, we need to make sure folder exist
    */
 

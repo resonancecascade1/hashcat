@@ -18,11 +18,14 @@ hashcat.dll
 *.out
 *.dSYM
 kernels/**
+.gkszcache
 lib/*.a
 bridges/*.dll
 bridges/*.so
 modules/*.dll
 modules/*.so
+feeds/*.dll
+feeds/*.so
 obj/*/*/*.o
 obj/*.o
 obj/*.a
@@ -30,7 +33,8 @@ include/CL
 tools/luks_tests
 .vscode
 test_edge*
-Rust/generic_hash/target
+Rust/feeds/*/target
+Rust/*/target
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

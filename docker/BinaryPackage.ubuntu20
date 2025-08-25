@@ -82,6 +82,7 @@ WORKDIR /root
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
 ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup target add x86_64-pc-windows-gnu
 
 ## For Windows we also need python
 
