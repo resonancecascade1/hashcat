@@ -29,6 +29,7 @@ on:
       - 'tools/**'
       - '**/Makefile'
       - '.github/workflows/build.yml'
+  workflow_dispatch:
   pull_request:
     branches:
       - master
@@ -62,6 +63,8 @@ jobs:
 
     name: Build ${{ matrix.os_name }} (${{ matrix.shared == 0 && 'Static' || 'Shared' }})
     runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.os == 'ubuntu-latest' && 'ghcr.io/resonancecascade1/ubuntu:main' || '' }}
     steps:
       - uses: actions/checkout@v4
         with:
