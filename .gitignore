@@ -18,7 +18,7 @@ hashcat.dll
 *.out
 *.dSYM
 kernels/**
-.gkszcache
+seekdbs/**
 lib/*.a
 bridges/*.dll
 bridges/*.so

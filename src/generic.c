@@ -18,9 +18,12 @@ bool generic_global_init (hashcat_ctx_t *hashcat_ctx)
 {
   generic_ctx_t        *generic_ctx        = hashcat_ctx->generic_ctx;
   folder_config_t      *folder_config      = hashcat_ctx->folder_config;
+  user_options_t       *user_options       = hashcat_ctx->user_options;
   user_options_extra_t *user_options_extra = hashcat_ctx->user_options_extra;
 
   // we probably need to add more stuff here
+
+  generic_ctx->global_ctx.quiet = user_options->quiet;
 
   generic_ctx->global_ctx.workc = user_options_extra->hc_workc;
   generic_ctx->global_ctx.workv = user_options_extra->hc_workv;
@@ -204,6 +207,8 @@ int generic_ctx_init (hashcat_ctx_t *hashcat_ctx)
       if (kernel_rules_generate (hashcat_ctx, &straight_ctx->kernel_rules_buf, &straight_ctx->kernel_rules_cnt, user_options->rp_gen_func_sel) == -1) return -1;
     }
   }
+
+  EVENT (EVENT_CLEAR_EVENT_LINE);
 
   if (generic_global_init (hashcat_ctx) == false) return -1;
 

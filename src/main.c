@@ -237,6 +237,15 @@ static void main_outerloop_finished (MAYBE_UNUSED hashcat_ctx_t *hashcat_ctx, MA
   hashcat_user->outer_threads_cnt = 0;
 }
 
+static void main_clear_event_line (MAYBE_UNUSED hashcat_ctx_t *hashcat_ctx, MAYBE_UNUSED const void *buf, MAYBE_UNUSED const size_t len)
+{
+  const user_options_t *user_options = hashcat_ctx->user_options;
+
+  if (user_options->quiet == true) return;
+
+  event_log_info_nn (hashcat_ctx, NULL);
+}
+
 static void main_cracker_starting (MAYBE_UNUSED hashcat_ctx_t *hashcat_ctx, MAYBE_UNUSED const void *buf, MAYBE_UNUSED const size_t len)
 {
   const user_options_t       *user_options       = hashcat_ctx->user_options;
@@ -1282,6 +1291,7 @@ static void event (const u32 id, hashcat_ctx_t *hashcat_ctx, const void *buf, co
     case EVENT_BRIDGES_SALT_PRE:          main_bridges_salt_pre          (hashcat_ctx, buf, len); break;
     case EVENT_CALCULATED_WORDS_BASE:     main_calculated_words_base     (hashcat_ctx, buf, len); break;
     case EVENT_CALCULATED_WORDS_CNT:      main_calculated_words_cnt      (hashcat_ctx, buf, len); break;
+    case EVENT_CLEAR_EVENT_LINE:          main_clear_event_line          (hashcat_ctx, buf, len); break;
     case EVENT_CRACKER_FINISHED:          main_cracker_finished          (hashcat_ctx, buf, len); break;
     case EVENT_CRACKER_HASH_CRACKED:      main_cracker_hash_cracked      (hashcat_ctx, buf, len); break;
     case EVENT_CRACKER_STARTING:          main_cracker_starting          (hashcat_ctx, buf, len); break;

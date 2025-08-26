@@ -116,6 +116,7 @@ typedef enum event_identifier
   EVENT_BRIDGES_SALT_PRE          = 0x00000123,
   EVENT_CALCULATED_WORDS_BASE     = 0x00000020,
   EVENT_CALCULATED_WORDS_CNT      = 0x00000021,
+  EVENT_CLEAR_EVENT_LINE          = 0x00001000,
   EVENT_CRACKER_FINISHED          = 0x00000030,
   EVENT_CRACKER_HASH_CRACKED      = 0x00000031,
   EVENT_CRACKER_STARTING          = 0x00000032,
@@ -2753,6 +2754,8 @@ typedef struct mask_ctx
 
 typedef struct generic_global_ctx
 {
+  bool   quiet;
+
   int    workc;
   char **workv;
 

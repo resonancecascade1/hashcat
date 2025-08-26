@@ -14,6 +14,10 @@ typedef struct feed_global
 {
   char *wordlist;
 
+  u64   *seek_db;
+  u64    seek_count;
+  u64    line_count;
+
 } feed_global_t;
 
 typedef struct feed_thread

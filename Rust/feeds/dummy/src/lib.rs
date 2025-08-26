@@ -3,6 +3,8 @@ use std::os::raw::{c_char, c_int, c_void};
 #[repr (C)]
 pub struct generic_global_ctx_t
 {
+  pub quiet: bool,
+
   pub workc: i32,
   pub workv: *mut *mut c_char,
 

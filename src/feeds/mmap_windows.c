@@ -1,3 +1,7 @@
+/**
+ * Author......: See docs/credits.txt
+ * License.....: MIT
+ */
 
 #define _FILE_OFFSET_BITS 64
 
