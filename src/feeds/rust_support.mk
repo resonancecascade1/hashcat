@@ -20,9 +20,16 @@ ifneq ($(filter 1.%,$(RUSTUP_VERSION)),)
 endif
 
 ifeq ($(CARGO_PRESENT),true)
+
+ifeq ($(shell uname),Darwin)
+	RUST_LIB_EXT = dylib
+else
+	RUST_LIB_EXT = so
+endif
+
 feeds/rust_%.so: $(RUST_SCAN_DIR)/%/Cargo.toml
 	$(RUST_CARGO) build --quiet $(RUST_MODE_FLAG) --manifest-path $^
-	cp Rust/feeds/$*/target/$(RUST_BUILD_MODE)/lib$*.so $@
+	cp Rust/feeds/$*/target/$(RUST_BUILD_MODE)/lib$*.$(RUST_LIB_EXT) $@
 ifeq ($(RUSTUP_PRESENT),true)
 feeds/rust_%.dll: $(RUST_SCAN_DIR)/%/Cargo.toml
 	$(RUST_RUSTUP) --quiet target add x86_64-pc-windows-gnu

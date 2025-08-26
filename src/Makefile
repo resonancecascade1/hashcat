@@ -562,6 +562,7 @@ clean:
 	$(RM) -rf *.outfiles
 	$(RM) -rf kernels
 	$(RM) -rf Rust/generic_hash/target
+	$(RM) -rf Rust/feeds/dummy/target
 
 .PHONY: distclean
 distclean: clean
